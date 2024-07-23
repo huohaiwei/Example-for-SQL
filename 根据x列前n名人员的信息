@@ -1,0 +1,2 @@
+## 查找 hire_date 排名倒数第3 的人员 的信息
+select * from employees where hire_date = (select DISTINCT hire_date from employees order by hire_date desc limit 2,1);
