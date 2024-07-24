@@ -1,0 +1,30 @@
+## 获取每个部门的最高薪资 所对应的那个员工
+##有一个员工表de简况如下:
+| emp_no | ept_no |
+|--------|--------|
+
+有一个薪水表s简况如下:
+| emp_no | salary |
+|--------|--------|
+
+## 先获取部门的最高薪资，即 de 和 s 关联查询，获得 ept_no -> salary, 然后对ept_no分组，Max(salary),获得每个部门的最高薪资
+## 再进行 de 和 s 关联查询，获得 emp_no -> (salary,ept_no) , 这样只需要 in 刚刚的每个部门最高薪资，即可查到每个部门最高薪资的员工
+
+select
+    de.dept_no,
+    de.emp_no,
+    s.salary
+from
+    dept_emp de
+    left join salaries s on de.emp_no = s.emp_no
+WHERE
+    (dept_no, s.salary) in (
+        SELECT
+            de.dept_no,
+            MAX(s.salary)
+        from
+            dept_emp de
+            LEFT JOIN salaries s on de.emp_no = s.emp_no
+        GROUP BY
+            de.dept_no
+    )
