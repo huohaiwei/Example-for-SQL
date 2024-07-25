@@ -1,0 +1,25 @@
+## 薪水第二多的员工的emp_no以及其对应的薪水salary
+## 薪水表salaries简况如下:
+|emp_no|salary| 
+|------|------|
+## 先子查询出一个表，子查询使用窗口函数dense_rank() over(order by salary desc) as salary_rank 来给salary列添加一个salary_rank的排名属性。
+## 父查询中再取排名第2的即可
+
+select
+    emp_no,
+    salary
+from
+    (
+        select
+            emp_no,
+            salary,
+            dense_rank() over (
+                order by
+                    salary desc
+            ) as salary_rank
+        from
+            salaries
+    ) s
+WHERE
+    s.salary_rank = 2
+
