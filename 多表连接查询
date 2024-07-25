@@ -1,0 +1,25 @@
+## 查找所有员工的last_name和first_name以及对应的dept_name
+## 员工表employees简况如下:
+| emp_no | first_name | last_name |
+| ------ | ---------- | --------- |
+
+有一个部门表departments表简况如下:
+| dept_no |	dept_name |
+| ------- | --------- |
+
+有一个，部门员工关系表dept_emp简况如下:
+| emp_no | dept_no |
+| ------ | ------- |
+
+##方法一：先左连接 employees 和 dept_emp ，得到emp_no -> dept_no，然后刚刚的结果再左连接 departments，最后得到 emp_no -> dept_no -> dept_name 
+##方法二：先子查询：左连接 dept_emp 和 departments ，得到dept_emp.emp_no -> dept_no -> dept_name ，再父查询：子查询结果 左连接employees ，
+获得deployees.emp_no -> dept_no -> dept_name
+
+select
+    last_name,
+    first_name,
+    ds.dept_name
+from
+    employees es
+    left join dept_emp de on es.emp_no = de.emp_no
+    left join departments ds on de.dept_no = ds.dept_no
